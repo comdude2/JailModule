@@ -1,0 +1,36 @@
+name: JailModule
+main: net.comdude2.plugins.jailmodule.main.JailModule
+version: 1.0.18
+author: comdude2
+depend: [ComCore]
+commands:
+   jail:
+      description: Jails a player or is used to configure the plugin.
+      usage: /jail [player|sub-command]
+      permission: comcore.modules.jail.jail
+      permission-message: You don't have permission to perform this command.
+   unjail:
+      description: Unjails a player
+      usage: /unjail <player>
+      permission: comcore.modules.jail.unjail
+      permission-message: You don't have permission to perform this command.
+permissions:
+   comcore.modules.jail.*:
+      description: Gives access to all JailModule commands and blocks you being jailed.
+      children:
+         comcore.modules.jail.jail: true
+         comcore.modules.jail.unjail: true
+         comcore.modules.jail.notify: true
+         comcore.modules.jail.bypass: true
+   comcore.modules.jail.jail:
+      description: Allows usage of /jail
+      default: op
+   comcore.modules.jail.unjail:
+      description: Allows usage of /unjail
+      default: op
+   comcore.modules.jail.notify:
+      description: Allows the plugin to notify you when someone is jailed
+      default: op
+   comcore.modules.jail.bypass:
+      description: Blocks you from being jailed
+      default: op

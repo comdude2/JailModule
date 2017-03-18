@@ -3,6 +3,8 @@ package net.comdude2.plugins.jailmodule.main;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import net.comdude2.plugins.jailmodule.commands.JailCommand;
+import net.comdude2.plugins.jailmodule.commands.UnjailCommand;
 import net.comdude2.plugins.minecraftcore.api.ComCoreModule;
 import net.comdude2.plugins.minecraftcore.main.ComCore;
 import net.md_5.bungee.api.ChatColor;
@@ -10,20 +12,45 @@ import net.md_5.bungee.api.ChatColor;
 public class JailModule extends JavaPlugin implements ComCoreModule{
 	
 	public static final String me = ChatColor.WHITE + "[" + ChatColor.DARK_AQUA + "Jail" + ChatColor.WHITE + "] ";
-	public static final String jail_name = "Jail";
+	public static String jail_name = "Jail";
 	
-	public JailController jc = null;
+	private JailController jc = null;
+	private Listeners listeners = null;
+	private ComCore cc = null;
+	
+	public String jail_world = null;
+	public int jail_x = 0;
+	public int jail_y = 0;
+	public int jail_z = 0;
 	
 	public JailModule(){
 		
 	}
 	
 	public void onEnable(){
-		this.jc = new JailController();
+		this.saveDefaultConfig();
+		String name = this.getConfig().getString("jail_name");
+		if (name != null){JailModule.jail_name = name;}
+		
+		//API
+		ComCore cc = this.loadComCore();
+		if (cc == null){this.getLogger().severe("Failed to load ComCore plugin, disabling myself.");this.getServer().getPluginManager().disablePlugin(this);return;}
+		//this.registerModule();
+		
+		//Commands
+		this.getCommand("jail").setExecutor(new JailCommand(this));
+		this.getCommand("unjail").setExecutor(new UnjailCommand(this));
+		
+		//Normal loading
+		this.jc = new JailController(this);
+		this.listeners = new Listeners(this);
+		this.listeners.register();
+		this.getLogger().info(ChatColor.stripColor(me) + "version " + this.getDescription().getVersion() + " enabled!");
 	}
 	
 	public void onDisable(){
-		
+		this.listeners.unregister();
+		this.getLogger().info(ChatColor.stripColor(me) + "version " + this.getDescription().getVersion() + " disabled!");
 	}
 	
 	public ComCore loadComCore() {
@@ -34,8 +61,23 @@ public class JailModule extends JavaPlugin implements ComCoreModule{
 	    return (ComCore) plugin;
 	}
 	
-	public void reload() {
+	public boolean registerModule() {
+		if (cc != null){
+			cc.test(this);
+		}
+		return false;
+	}
+
+	public void unregisterModule() {
 		
+	}
+	
+	public void reload() {
+		this.listeners.unregister();
+		this.jc.saveAll();
+		this.jc.unloadAll();
+		this.jc.loadOnline();
+		this.listeners.register();
 	}
 	
 	public void shutdown() {
@@ -48,6 +90,18 @@ public class JailModule extends JavaPlugin implements ComCoreModule{
 	
 	public JailController getJailController(){
 		return this.jc;
+	}
+	
+	/*
+	 * Static Methods
+	 */
+	
+	public static int toSeconds(long l){
+		return (int)(l / 1000);
+	}
+	
+	public static boolean isNumeric(String s){
+		try{Integer.parseInt(s);return true;}catch(Exception e){return false;}
 	}
 	
 }
