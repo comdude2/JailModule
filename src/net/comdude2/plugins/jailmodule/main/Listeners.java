@@ -40,20 +40,23 @@ public class Listeners implements Listener{
 	
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onCommandPreProcess(PlayerCommandPreprocessEvent event){
-		jm.getLogger().info("DEBUG: " + jm.getJailController().getJailedPlayers().size());
-		if (event.getPlayer().hasPermission("comcore.modules.jail.bypass")){
-			//Allow
-		}else if (jm.getJailController().isAllowedCommand(event.getMessage())){
-			//Allow
-		}else{
-			event.setCancelled(true);
-			event.getPlayer().sendMessage(JailModule.me + ChatColor.RED + "You are in " + JailModule.jail_name + ", you can't perform any commands until you're released.");
+		JailedPlayer jp = jm.getJailController().getJailedPlayer(event.getPlayer().getUniqueId());
+		if (jp != null){
+			jm.getLogger().info("DEBUG: " + jm.getJailController().getJailedPlayers().size());
+			if (event.getPlayer().hasPermission("comcore.modules.jail.bypass")){
+				//Allow
+			}else if (jm.getJailController().isAllowedCommand(event.getMessage())){
+				//Allow
+			}else{
+				event.setCancelled(true);
+				event.getPlayer().sendMessage(JailModule.me + ChatColor.RED + "You are in " + JailModule.jail_name + ", you can't perform any commands until you're released.");
+			}
 		}
 	}
 	
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onPlayerTeleport(PlayerTeleportEvent event){
-		JailedPlayer jp = jm.getJailController().load(event.getPlayer().getUniqueId());
+		JailedPlayer jp = jm.getJailController().getJailedPlayer(event.getPlayer().getUniqueId());
 		if (jp != null){
 			if (jp.isGoingToJail()){
 				//Allow
@@ -66,7 +69,7 @@ public class Listeners implements Listener{
 	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerJoinEvent(PlayerJoinEvent event){
-		JailedPlayer jp = jm.getJailController().load(event.getPlayer().getUniqueId());
+		JailedPlayer jp = jm.getJailController().getJailedPlayer(event.getPlayer().getUniqueId());
 		if (jp != null){
 			Date d = new Date();
 			long now = d.getTime();
