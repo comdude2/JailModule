@@ -40,6 +40,12 @@ public class JailController {
 		this.save(jp);
 	}
 	
+	public void unjailPlayer(JailedPlayer jp){
+		this.jailedPlayers.remove(jp);
+		File f = new File(path + jp.getPlayerId().toString() + ".obj");
+		if (f.exists()){try{f.delete();}catch(Exception e){}}
+	}
+	
 	public void save(JailedPlayer jp){
 		File f = new File(path + jp.getPlayerId().toString() + ".obj");
 		if (f.exists()){f.delete();}
@@ -83,7 +89,12 @@ public class JailController {
 	}
 	
 	public void unload(JailedPlayer jp){
-		this.jailedPlayers.remove(jp);
+		for (JailedPlayer j : this.jailedPlayers){
+			if (j.getPlayerId() == jp.getPlayerId()){
+				this.jailedPlayers.remove(j);
+				return;
+			}
+		}
 	}
 	
 	public void unloadAll(){

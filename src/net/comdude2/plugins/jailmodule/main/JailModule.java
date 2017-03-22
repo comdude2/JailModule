@@ -5,6 +5,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import net.comdude2.plugins.jailmodule.commands.JailCommand;
 import net.comdude2.plugins.jailmodule.commands.UnjailCommand;
+import net.comdude2.plugins.jailmodule.runtime.JailSyncRunnable;
 import net.comdude2.plugins.minecraftcore.api.ComCoreModule;
 import net.comdude2.plugins.minecraftcore.main.ComCore;
 import net.md_5.bungee.api.ChatColor;
@@ -45,11 +46,17 @@ public class JailModule extends JavaPlugin implements ComCoreModule{
 		this.jc = new JailController(this);
 		this.listeners = new Listeners(this);
 		this.listeners.register();
+		
+		//Runnables
+		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new JailSyncRunnable(this), 60L, 20L);
 		this.getLogger().info(ChatColor.stripColor(me) + "version " + this.getDescription().getVersion() + " enabled!");
 	}
 	
 	public void onDisable(){
 		this.listeners.unregister();
+		this.getServer().getScheduler().cancelTasks(this);
+		this.jc.saveAll();
+		this.jc.unloadAll();
 		this.getLogger().info(ChatColor.stripColor(me) + "version " + this.getDescription().getVersion() + " disabled!");
 	}
 	
@@ -74,9 +81,11 @@ public class JailModule extends JavaPlugin implements ComCoreModule{
 	
 	public void reload() {
 		this.listeners.unregister();
+		this.getServer().getScheduler().cancelTasks(this);
 		this.jc.saveAll();
 		this.jc.unloadAll();
 		this.jc.loadOnline();
+		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new JailSyncRunnable(this), 60L, 20L);
 		this.listeners.register();
 	}
 	

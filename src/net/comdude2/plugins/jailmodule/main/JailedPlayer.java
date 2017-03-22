@@ -7,15 +7,15 @@ public class JailedPlayer {
 	private UUID playerId = null;
 	private long jailedAt = 0L;
 	private long jailTime = 0L;
-	private long timeServed = 0L;
+	private long unjailAt = 0L;
 	private String reason = null;
 	private boolean going_to_jail = true;
 	
-	public JailedPlayer(UUID playerId, long jailedAt, long jailTime, String reason){//No time served as this is object creation
+	public JailedPlayer(UUID playerId, long jailedAt, long jailTime, long unjailAt, String reason){//No time served as this is object creation
 		this.playerId = playerId;
 		this.jailedAt = jailedAt;
 		this.jailTime = jailTime;
-		this.timeServed = 0L;
+		this.unjailAt = unjailAt;
 	}
 	
 	public UUID getPlayerId(){
@@ -26,6 +26,10 @@ public class JailedPlayer {
 		return this.jailedAt;
 	}
 	
+	public void setJailedAt(long jailedAt){
+		this.jailedAt = jailedAt;
+	}
+	
 	public long getJailTime(){
 		return this.jailTime;
 	}
@@ -34,12 +38,12 @@ public class JailedPlayer {
 		this.jailTime = time;
 	}
 	
-	public long getTimeServed(){
-		return this.timeServed;
+	public long getUnjailAt(){
+		return this.unjailAt;
 	}
 	
-	public void setTimeServed(long timeServed){
-		this.timeServed = timeServed;
+	public void setUnjailAt(long unjailAt){
+		this.unjailAt = unjailAt;
 	}
 	
 	public String getReason(){

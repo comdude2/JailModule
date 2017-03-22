@@ -71,7 +71,7 @@ public class JailCommand implements CommandExecutor {
 					//Jail player
 					if (jm.getJailController().isJailedPlayer(uuid)){red(sender, "This player is already in " + JailModule.jail_name);}
 					Date d = new Date();
-					JailedPlayer jp = new JailedPlayer(uuid, d.getTime(), jailTime, args[2]);
+					JailedPlayer jp = new JailedPlayer(uuid, d.getTime(), jailTime, d.getTime() + jailTime, args[2]);
 					jm.getJailController().jailPlayer(jp);
 					if (online != null){
 						World w = jm.getServer().getWorld(jm.jail_world);
