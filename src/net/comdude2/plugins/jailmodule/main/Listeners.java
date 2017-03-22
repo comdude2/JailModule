@@ -40,6 +40,7 @@ public class Listeners implements Listener{
 	
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onCommandPreProcess(PlayerCommandPreprocessEvent event){
+		jm.getLogger().info("DEBUG: " + jm.getJailController().getJailedPlayers().size());
 		if (event.getPlayer().hasPermission("comcore.modules.jail.bypass")){
 			//Allow
 		}else if (jm.getJailController().isAllowedCommand(event.getMessage())){
@@ -52,9 +53,14 @@ public class Listeners implements Listener{
 	
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onPlayerTeleport(PlayerTeleportEvent event){
-		if (jm.getJailController().isJailedPlayer(event.getPlayer().getUniqueId())){
-			event.setCancelled(true);
-			event.getPlayer().sendMessage(JailModule.me + ChatColor.RED + "You're still shackled in " + JailModule.jail_name + ", you can't teleport!");
+		JailedPlayer jp = jm.getJailController().load(event.getPlayer().getUniqueId());
+		if (jp != null){
+			if (jp.isGoingToJail()){
+				//Allow
+			}else{
+				event.setCancelled(true);
+				event.getPlayer().sendMessage(JailModule.me + ChatColor.RED + "You're still shackled in " + JailModule.jail_name + ", you can't teleport!");
+			}
 		}
 	}
 	

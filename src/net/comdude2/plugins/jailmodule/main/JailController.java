@@ -9,6 +9,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import org.bukkit.entity.Player;
 
 import net.comdude2.plugins.minecraftcore.util.ObjectManager;
+import net.comdude2.plugins.minecraftcore.util.YamlManager;
 
 public class JailController {
 	
@@ -47,6 +48,7 @@ public class JailController {
 	}
 	
 	public void save(JailedPlayer jp){
+		/*
 		File f = new File(path + jp.getPlayerId().toString() + ".obj");
 		if (f.exists()){f.delete();}
 		try {
@@ -54,6 +56,8 @@ public class JailController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		*/
+		this.saveJailedPlayer(jp);
 	}
 	
 	public void saveAll(){
@@ -63,6 +67,7 @@ public class JailController {
 	}
 	
 	public JailedPlayer load(UUID uuid){
+		/*
 		File f = new File(path + uuid.toString() + ".obj");
 		if (f.exists()){
 			try {
@@ -80,6 +85,10 @@ public class JailController {
 			}
 		}
 		return null;
+		*/
+		JailedPlayer jp = this.loadJailedPlayer(uuid);
+		this.jailedPlayers.add(jp);
+		return jp;
 	}
 	
 	public void loadOnline(){
@@ -131,6 +140,51 @@ public class JailController {
 			}
 		}
 		return false;
+	}
+	
+	/*
+	 * JailedPlayer save and load
+	 */
+	
+	private void saveJailedPlayer(JailedPlayer jp){
+		YamlManager ym = new YamlManager(jm, "JailedPlayers/", jp.getPlayerId().toString());
+		if (ym.exists()){ym.delete();}
+		ym.createFile();
+		ym.getYAML().set("jailedPlayer.jailedAt", jp.getJailedAt());
+		ym.getYAML().set("jailedPlayer.jailTime", jp.getJailTime());
+		ym.getYAML().set("jailedPlayer.unjailAt", jp.getUnjailAt());
+		ym.getYAML().set("jailedPlayer.reason", jp.getReason());
+		ym.getYAML().set("jailedPlayer.goingToJail", jp.isGoingToJail());
+		ym.saveYAML();
+	}
+	
+	private JailedPlayer loadJailedPlayer(UUID uuid){
+		YamlManager ym = new YamlManager(jm, "JailedPlayers/", uuid.toString());
+		if (ym.exists()){
+			long jailedAt = ym.getYAML().getLong("jailedPlayer.jailedAt");
+			long jailTime = ym.getYAML().getLong("jailedPlayer.jailTime");
+			long unjailAt = ym.getYAML().getLong("jailedPlayer.unjailAt");
+			String reason = ym.getYAML().getString("jailedPlayer.reason");
+			boolean goingToJail = ym.getYAML().getBoolean("jailedPlayer.goingToJail");
+			if (isNull(jailedAt)){return null;}
+			if (isNull(jailTime)){return null;}
+			if (isNull(unjailAt)){return null;}
+			if (isNull(reason)){return null;}
+			JailedPlayer jp = new JailedPlayer(uuid, jailedAt, jailTime, unjailAt, reason);
+			if (!goingToJail){
+				jp.inJail();
+			}
+			return jp;
+		}
+		return null;
+	}
+	
+	private boolean isNull(Object o){
+		if (o == null){
+			return true;
+		}else{
+			return false;
+		}
 	}
 	
 }

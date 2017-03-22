@@ -29,9 +29,15 @@ public class JailModule extends JavaPlugin implements ComCoreModule{
 	}
 	
 	public void onEnable(){
+		
+		//Config
 		this.saveDefaultConfig();
 		String name = this.getConfig().getString("jail_name");
 		if (name != null){JailModule.jail_name = name;}
+		if (this.getConfig().contains("jail_world")){this.jail_world = this.getConfig().getString("jail_world");}
+		if (this.getConfig().contains("jail_x")){this.jail_x = this.getConfig().getInt("jail_x");}
+		if (this.getConfig().contains("jail_y")){this.jail_y = this.getConfig().getInt("jail_y");}
+		if (this.getConfig().contains("jail_z")){this.jail_z = this.getConfig().getInt("jail_z");}
 		
 		//API
 		ComCore cc = this.loadComCore();

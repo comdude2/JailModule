@@ -28,17 +28,12 @@ public class UnjailCommand implements CommandExecutor {
 					Player online = null;
 					for (Player p : jm.getServer().getOnlinePlayers()){
 						if (p.getName().equalsIgnoreCase(args[0])){
-							if (p.hasPermission("comcore.modules.jail.bypass")){
-								red(sender, "You can't " + JailModule.jail_name + " this person.");
-								return true;
-							}else{
-								online = p;
-								break;
-							}
+							online = p;
+							break;
 						}
 					}
 					if (online == null){red(sender, "Player not found (To unjail a player, they must be online)."); return true;}
-					
+					jm.getLogger().info("DEBUG: " + jm.getJailController().getJailedPlayers().size());
 					JailedPlayer jp = jm.getJailController().getJailedPlayer(online.getUniqueId());
 					if (jp == null){red(sender, "This player isn't in " + JailModule.jail_name);return true;}
 					jm.getJailController().unjailPlayer(jp);

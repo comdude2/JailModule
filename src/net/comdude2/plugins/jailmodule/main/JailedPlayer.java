@@ -1,9 +1,11 @@
 package net.comdude2.plugins.jailmodule.main;
 
+import java.io.Serializable;
 import java.util.UUID;
 
-public class JailedPlayer {
+public class JailedPlayer implements Serializable{
 	
+	private static final long serialVersionUID = 4906795534318081826L;
 	private UUID playerId = null;
 	private long jailedAt = 0L;
 	private long jailTime = 0L;
