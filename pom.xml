@@ -7,6 +7,24 @@
   <description>A module for the ComCore plugin</description>
   <build>
     <sourceDirectory>src</sourceDirectory>
+    <resources>
+      <resource>
+        <targetPath>.</targetPath>
+        <filtering>true</filtering>
+        <directory>${basedir}</directory>
+        <includes>
+          <include>plugin.yml</include>
+        </includes>
+      </resource>
+      <resource>
+        <targetPath>.</targetPath>
+        <filtering>true</filtering>
+        <directory>${basedir}</directory>
+        <includes>
+          <include>config.yml</include>
+        </includes>
+      </resource>
+    </resources>
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -18,4 +36,37 @@
       </plugin>
     </plugins>
   </build>
+  <repositories>
+    <repository>
+      <id>spigot-repo</id>
+      <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+    </repository>
+    <repository>
+      <id>bukkit-repo</id>
+      <url>http://repo.bukkit.org/content/groups/public/</url>
+    </repository>
+  </repositories>
+  <dependencies>
+    <!--Spigot API-->
+    <dependency>
+      <groupId>org.spigotmc</groupId>
+      <artifactId>spigot-api</artifactId>
+      <version>1.11.2-R0.1-SNAPSHOT</version>
+      <scope>provided</scope>
+    </dependency>
+    <!--Bukkit API-->
+    <dependency>
+      <groupId>org.bukkit</groupId>
+      <artifactId>bukkit</artifactId>
+      <version>1.11.2-R0.1-SNAPSHOT</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>net.comdude2.plugins</groupId>
+      <artifactId>jailmodule</artifactId>
+      <version>LATEST</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/src/net/comdude2/plugins/jailmodule/lib/ComCore.jar</systemPath>
+    </dependency>
+  </dependencies>
 </project>

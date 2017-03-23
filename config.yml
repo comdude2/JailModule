@@ -1,5 +1,5 @@
 jail_name: Jail
 jail_world: world
-jail_x: 0
-jail_y: 0
-jail_z: 0
+jail_x: 30
+jail_y: 50
+jail_z: 400

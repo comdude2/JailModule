@@ -76,7 +76,7 @@ public class JailModule extends JavaPlugin implements ComCoreModule{
 	
 	public boolean registerModule() {
 		if (cc != null){
-			cc.test(this);
+			cc.registerModule(this);
 		}
 		return false;
 	}

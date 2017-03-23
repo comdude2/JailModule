@@ -19,7 +19,7 @@ public class UnjailCommand implements CommandExecutor {
 		this.jm = jm;
 	}
 	
-	@Override
+	//@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		//  /unjail <player> <reason>
 		if (sender.hasPermission("comcore.modules.jail.unjail")){

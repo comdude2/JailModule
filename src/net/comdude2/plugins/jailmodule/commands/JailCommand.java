@@ -24,12 +24,14 @@ public class JailCommand implements CommandExecutor {
 		this.jm = jm;
 	}
 	
-	@Override
+	//@Override ? o.O
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if (sender.hasPermission("comcore.modules.jail.jail")){
 			if (args.length > 0){
 				if (args.length == 1){
-					
+					if(args[0].equalsIgnoreCase("help")) {
+						sender.sendMessage(this.helpMsg());
+					}
 				}else if (args.length == 2){
 					
 				}else if (args.length == 3){
@@ -99,7 +101,15 @@ public class JailCommand implements CommandExecutor {
 	/*
 	 * Messages
 	 */
-	
+
+	private String helpMsg() {
+		return ChatColor.translateAlternateColorCodes('&', "&f-------[&3Jail&f]-------\n" +
+				"&b/jail <player> <timeInMinutes> <Reason>\n" +
+				"&b/unjail <player> <reason>\n" +
+				"Written and maintained by &1comdude2\n" +
+				"&f-------[&3Jail&f]-------");
+	}
+
 	private void permissions(CommandSender sender){
 		sender.sendMessage(JailModule.me + ChatColor.RED + "You don't have permission to do this.");
 	}

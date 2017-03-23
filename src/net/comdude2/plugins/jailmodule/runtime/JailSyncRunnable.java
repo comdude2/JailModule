@@ -17,14 +17,13 @@ public class JailSyncRunnable implements Runnable {
 		this.jm = jm;
 	}
 	
-	@Override
+	//@Override
 	public void run() {
-		if (jm.getJailController().getJailedPlayers().size() > 0){
+		if (!jm.getJailController().getJailedPlayers().isEmpty()){
 			Iterator <JailedPlayer> it = jm.getJailController().getJailedPlayers().iterator();
 			while(it.hasNext()){
 				JailedPlayer jp = it.next();
-				Date d = new Date();
-				if (jp.getUnjailAt() >= d.getTime()){
+				if (System.currentTimeMillis() >= jp.getUnjailAt()){
 					//Unjail
 					Player p = jm.getServer().getPlayer(jp.getPlayerId());
 					if (p != null){
