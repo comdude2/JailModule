@@ -40,6 +40,7 @@ public class UnjailCommand implements CommandExecutor {
 					File f = new File(jm.getDataFolder() + "/JailedPlayers/" + online.getUniqueId().toString() + ".obj");
 					if (f.exists()){f.delete();}
 					jm.getServer().dispatchCommand(jm.getServer().getConsoleSender(), "spawn " + online.getName());
+					online.sendMessage(JailModule.me + ChatColor.GREEN + "You have been unjailed.");
 					sender.sendMessage(JailModule.me + ChatColor.GREEN + "Player unjailed.");
 				}else{
 					unknown(sender);
